@@ -70,7 +70,7 @@
         async function runBot() {
             while (botRunning) {
                 try {
-                    const response = await axios.get('https://sorry-gorilla-universityofsaopaulo-6f82a82f.koyeb.app/api/trade');
+                    const response = await axios.get('/api/trade');
                     const data = response.data;
                     log(data.message);
                     if (data.drawdown !== undefined) {

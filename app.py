@@ -5,19 +5,22 @@ import time
 from binance.client import Client
 from binance.enums import *
 
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, abort
 app = Flask(__name__, static_folder='.')
 
 @app.route('/')
 def index():
-    return send_from_directory(app.static_folder, 'index.html')
+    try:
+        return send_from_directory(app.static_folder, 'index.html')
+    except FileNotFoundError:
+        abort(404, description="index.html not found")
 
 # Binance Testnet API credentials
 API_KEY = os.environ.get('BINANCE_API_KEY')
 API_SECRET = os.environ.get('BINANCE_API_SECRET')
 
 # Set up Binance client
-client = Client(os.environ.get('API_KEY'), os.environ.get('API_SECRET'), testnet=True)
+client = Client(API_KEY, API_SECRET, testnet=True)
 
 # Define the trading parameters
 symbol = 'BTCUSDT'
