@@ -5,7 +5,12 @@ import time
 from binance.client import Client
 from binance.enums import *
 
-app = Flask(__name__)
+from flask import Flask, jsonify, send_from_directory
+app = Flask(__name__, static_folder='.')
+
+@app.route('/')
+def index():
+    return send_from_directory(app.static_folder, 'index.html')
 
 # Binance Testnet API credentials
 API_KEY = os.environ.get('BINANCE_API_KEY')
