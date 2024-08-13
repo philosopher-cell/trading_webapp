@@ -16,8 +16,8 @@ def index():
         abort(404, description="index.html not found")
 
 # Binance Testnet API credentials
-API_KEY = os.environ.get('BINANCE_API_KEY')
-API_SECRET = os.environ.get('BINANCE_API_SECRET')
+API_KEY = 'OgCj4lgASWdBtSzjQUEmshRotjYMxPWIlixGLpnQC4Piwn39cgoSPDt7NCMSorTY'
+API_SECRET = 'ScKX6PEUopzcyk2WVOzIsbD4S3iEsnDEC7fq06GokN7cdP6p0APQQINBM6jTqinJ'
 
 # Set up Binance client
 client = Client(API_KEY, API_SECRET, testnet=True)
@@ -90,8 +90,8 @@ def trade():
             buy_price = None
             return jsonify({"message": f"Placed sell order at {sell_price}", "drawdown": 0})
 
-    elif sell_price is not None and current_price < sell_price:
-        # Place buy order if current price is lower than sell price
+    elif sell_price is not None and current_price < sell_price and buy_price is None:
+        # Place buy order if current price is lower than sell price and there's no active buy order
         buy_order = place_buy_order(current_price, trade_amount)
         if buy_order:
             buy_price = current_price
