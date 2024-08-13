@@ -73,9 +73,9 @@
                     const response = await axios.get('/api/trade');
                     const data = response.data;
                     log(data.message);
-                    if (data.drawdown !== undefined) {
-                        drawdownDiv.textContent = `Current Drawdown: ${data.drawdown.toFixed(8)} USDT`;
-                    }
+                    // Always update drawdown, even if it's zero
+                    const drawdownValue = data.drawdown !== undefined ? data.drawdown : 0;
+                    drawdownDiv.textContent = `Current Drawdown: ${drawdownValue.toFixed(8)} USDT`;
                 } catch (error) {
                     log(`Error: ${error.message}`);
                 }
