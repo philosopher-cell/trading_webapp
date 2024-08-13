@@ -1,0 +1,10 @@
+Flask==2.2.5
+pandas==1.5.3
+requests==2.31.0
+Werkzeug==2.2.3
+Jinja2==3.1.2
+itsdangerous==2.1.2
+click==8.0.4
+numpy==1.24.3
+python-binance==1.0.19
+gunicorn==20.1.0

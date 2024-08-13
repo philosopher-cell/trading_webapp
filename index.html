@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binance Trading Bot</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #status, #drawdown {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        #log {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <h1>Binance Trading Bot</h1>
+    <div id="status">Status: Stopped</div>
+    <div id="drawdown">Current Drawdown: N/A</div>
+    <button id="startBtn">Start Bot</button>
+    <button id="stopBtn" disabled>Stop Bot</button>
+    <h2>Log</h2>
+    <div id="log"></div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const statusDiv = document.getElementById('status');
+        const drawdownDiv = document.getElementById('drawdown');
+        const logDiv = document.getElementById('log');
+
+        let botRunning = false;
+
+        startBtn.addEventListener('click', startBot);
+        stopBtn.addEventListener('click', stopBot);
+
+        function startBot() {
+            botRunning = true;
+            statusDiv.textContent = 'Status: Running';
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            runBot();
+        }
+
+        function stopBot() {
+            botRunning = false;
+            statusDiv.textContent = 'Status: Stopped';
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+
+        function log(message) {
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        async function runBot() {
+            while (botRunning) {
+                try {
+                    const response = await axios.get('/api/trade');
+                    const data = response.data;
+                    log(data.message);
+                    if (data.drawdown !== undefined) {
+                        drawdownDiv.textContent = `Current Drawdown: ${data.drawdown.toFixed(8)} USDT`;
+                    }
+                } catch (error) {
+                    log(`Error: ${error.message}`);
+                }
+                await new Promise(resolve => setTimeout(resolve, 5000));
+            }
+        }
+    </script>
+</body>
+</html>
